@@ -2,9 +2,12 @@ package br.com.digitalhouse.paoeleite;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.room.Dao;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +28,7 @@ public abstract class ComidaRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             ComidaRoomDatabase.class, "comida_database")
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
@@ -34,4 +38,17 @@ public abstract class ComidaRoomDatabase extends RoomDatabase {
     }
 
 
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+
+            databaseWriteExecutor.execute(() -> {
+                ComidaDao dao = INSTANCE.comidaDao();
+                dao.deleteAll();
+
+            });
+
+        }
+    };
 }

@@ -2,5 +2,5 @@
     <string name="app_name">PaoELeite</string>
     <string name="hint_word">Palavra...</string>
     <string name="button_save">Salva</string>
-    <string name="empty_not_saved">Palavra não salva porque está vazia.</string>
+    <string name="empty_not_saved">Nenhuma comida foi escrita para ser salva. Digita uma comida.</string>
 </resources>
